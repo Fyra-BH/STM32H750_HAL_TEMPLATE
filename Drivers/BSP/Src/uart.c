@@ -8,8 +8,10 @@
 
 #include "uart.h"
 #include "sys.h"
-
 #include "stdio.h"
+
+
+UART_HandleTypeDef huart1;
 
 /**
   * @brief USART1 Initialization Function
@@ -19,30 +21,30 @@
 void uart_init(void)
 {
 
-  huart.Instance = USART1;
-  huart.Init.BaudRate = 115200;
-  huart.Init.WordLength = UART_WORDLENGTH_8B;
-  huart.Init.StopBits = UART_STOPBITS_1;
-  huart.Init.Parity = UART_PARITY_NONE;
-  huart.Init.Mode = UART_MODE_TX_RX;
-  huart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart) != HAL_OK)
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_SetTxFifoThreshold(&huart, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_SetRxFifoThreshold(&huart, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_DisableFifoMode(&huart) != HAL_OK)
+  if (HAL_UARTEx_DisableFifoMode(&huart1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -51,13 +53,13 @@ void uart_init(void)
 /**
 * @brief UART MSP Initialization
 * This function configures the hardware resources used in this example
-* @param huart: UART handle pointer
+* @param huart1: UART handle pointer
 * @retval None
 */
-void HAL_UART_MspInit(UART_HandleTypeDef* huart)
+void HAL_UART_MspInit(UART_HandleTypeDef* huart1)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(huart->Instance==USART1)
+  if(huart1->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspInit 0 */
 
@@ -93,5 +95,6 @@ void uprint(const char *s, ...)
     va_end(ap);
      
     // 这里写自己的打印输出函数，比如这里用puts
-    HAL_UART_Transmit(&huart,(uint8_t *)buffer,strlen(buffer),100);
+    HAL_UART_Transmit(&huart1,(uint8_t *)buffer,strlen(buffer),100);
 }
+

@@ -12,9 +12,9 @@
 #include "stdarg.h"
 #include "string.h"
 
-UART_HandleTypeDef huart;
 
 void uart_init(void);
 void uprint(const char *s, ...);
 
 #endif
+
