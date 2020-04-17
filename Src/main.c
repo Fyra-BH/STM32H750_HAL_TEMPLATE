@@ -8,6 +8,7 @@
 #include "stm32h7xx_hal.h"
 #include "bsp.h"
 
+
 int main(void)
 {
   HAL_Init();

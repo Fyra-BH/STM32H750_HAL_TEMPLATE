@@ -15,6 +15,12 @@
 ######################################
 TARGET = H750VB
 
+FIRMWARE_ISR:=frimware0.bin
+FIRMWARE_TEXT:=frimware1.bin
+
+
+HAL_LIB_SATIC = Drivers/STM32H7xx_HAL_Driver/libstm32h750xxhal.a
+LIB_FLAG = -LDrivers/STM32H7xx_HAL_Driver -lstm32h750xxhal
 
 ######################################
 # building variables
@@ -24,10 +30,15 @@ DEBUG = 1
 # optimization
 OPT = -Og
 
-#########
+#######################
 # V=1 shows the details
-#########
+#######################
 V ?=0
+
+#######################
+# S=1 generate firmware0 and firmware1
+#######################
+S ?=0
 
 #######################################
 # paths
@@ -41,7 +52,6 @@ BUILD_DIR = build
 
 SRCDIRS	:=\
 Src \
-Drivers/STM32H7xx_HAL_Driver/Src \
 Drivers/BSP/Src \
 
 C_SOURCES := $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.c))
@@ -111,9 +121,9 @@ AS_INCLUDES =
 
 
 # compile gcc flags
-ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) $(LIB_FLAG) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) $(LIB_FLAG) -Wall -fdata-sections -ffunction-sections
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -128,7 +138,13 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
+
+ifeq ($(S),1)
+LDSCRIPT = STM32H750VBTx_FLASH_SPLIT.ld
+else
 LDSCRIPT = STM32H750VBTx_FLASH.ld
+endif
+
 
 # libraries
 LIBS = -lc -lm -lnosys 
@@ -156,7 +172,7 @@ else
 	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 	@echo CC '>'	$@
 endif
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.s $(HAL_LIB_SATIC) Makefile | $(BUILD_DIR)
 ifeq ($(V),1)
 	$(AS) -c $(CFLAGS) $< -o $@
 else
@@ -164,11 +180,11 @@ else
 	@echo AS '>'	$@
 endif
 
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(HAL_LIB_SATIC) Makefile 
 ifeq ($(V),1)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) $(LIB_FLAG) -o $@
 else
-	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	@$(CC) $(OBJECTS) $(LDFLAGS) $(LIB_FLAG) -o $@
 	@echo CC '>'	$@
 endif
 	$(SZ) $@
@@ -176,8 +192,16 @@ endif
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
-	
+ifeq ($(S),1)
+	$(BIN) -j .isr_vector $< $(BUILD_DIR)/$(FIRMWARE_ISR)
+	$(BIN) -j .text -j .rodata -j .ARM.extab -j .ARM -j .preinit_array -j .init_array -j .fini_array -j .data   $< $(BUILD_DIR)/$(FIRMWARE_TEXT)
+else
+	$(BIN) $< $@
+endif
+
+$(HAL_LIB_SATIC):
+	cd $(dir $@)&&make
+
 $(BUILD_DIR):
 	mkdir $@		
 
