@@ -14,7 +14,7 @@
 
 
 void uart_init(void);
-void uprint(const char *s, ...);
+void print(const char *s, ...);
 
 #endif
 

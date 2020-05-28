@@ -543,14 +543,14 @@ Section Cross References
     uart.o(i.uart_init) refers to stm32h7xx_hal_uart_ex.o(i.HAL_UARTEx_SetRxFifoThreshold) for HAL_UARTEx_SetRxFifoThreshold
     uart.o(i.uart_init) refers to stm32h7xx_hal_uart_ex.o(i.HAL_UARTEx_DisableFifoMode) for HAL_UARTEx_DisableFifoMode
     uart.o(i.uart_init) refers to uart.o(.bss) for huart1
-    uart.o(i.uprint) refers to vsprintf.o(.text) for vsprintf
-    uart.o(i.uprint) refers to strlen.o(.text) for strlen
-    uart.o(i.uprint) refers to stm32h7xx_hal_uart.o(i.HAL_UART_Transmit) for HAL_UART_Transmit
-    uart.o(i.uprint) refers to uart.o(.bss) for huart1
+    uart.o(i.print) refers to vsprintf.o(.text) for vsprintf
+    uart.o(i.print) refers to strlen.o(.text) for strlen
+    uart.o(i.print) refers to stm32h7xx_hal_uart.o(i.HAL_UART_Transmit) for HAL_UART_Transmit
+    uart.o(i.print) refers to uart.o(.bss) for huart1
     main.o(i.main) refers to stm32h7xx_hal.o(i.HAL_Init) for HAL_Init
     main.o(i.main) refers to bsp.o(i.bsp_init) for bsp_init
     main.o(i.main) refers to stm32h7xx_hal.o(i.HAL_Delay) for HAL_Delay
-    main.o(i.main) refers to uart.o(i.uprint) for uprint
+    main.o(i.main) refers to uart.o(i.print) for print
     main.o(i.main) refers to led.o(i.led_on) for led_on
     main.o(i.main) refers to led.o(i.led_off) for led_off
     stm32h7xx_it.o(i.SysTick_Handler) refers to stm32h7xx_hal.o(i.HAL_IncTick) for HAL_IncTick
@@ -2075,7 +2075,7 @@ Image Symbol Table
     i.led_on                                 0x08006178   Section        0  led.o(i.led_on)
     i.main                                   0x08006194   Section        0  main.o(i.main)
     i.uart_init                              0x080061dc   Section        0  uart.o(i.uart_init)
-    i.uprint                                 0x08006248   Section        0  uart.o(i.uprint)
+    i.print                                 0x08006248   Section        0  uart.o(i.print)
     locale$$code                             0x08006284   Section       44  lc_numeric_c.o(locale$$code)
     locale$$code                             0x080062b0   Section       44  lc_ctype_c.o(locale$$code)
     x$fpl$fpinit                             0x080062dc   Section       10  fpinit.o(x$fpl$fpinit)
@@ -2494,7 +2494,7 @@ Image Symbol Table
     led_on                                   0x08006179   Thumb Code    24  led.o(i.led_on)
     main                                     0x08006195   Thumb Code    54  main.o(i.main)
     uart_init                                0x080061dd   Thumb Code    98  uart.o(i.uart_init)
-    uprint                                   0x08006249   Thumb Code    56  uart.o(i.uprint)
+    print                                   0x08006249   Thumb Code    56  uart.o(i.print)
     _get_lc_numeric                          0x08006285   Thumb Code    44  lc_numeric_c.o(locale$$code)
     _get_lc_ctype                            0x080062b1   Thumb Code    44  lc_ctype_c.o(locale$$code)
     _fp_init                                 0x080062dd   Thumb Code    10  fpinit.o(x$fpl$fpinit)
@@ -2719,7 +2719,7 @@ Memory Map of the image
     0x08006178   0x0000001c   Code   RO         4359    i.led_on            led.o
     0x08006194   0x00000048   Code   RO         4475    i.main              main.o
     0x080061dc   0x0000006c   Code   RO         4430    i.uart_init         uart.o
-    0x08006248   0x0000003c   Code   RO         4431    i.uprint            uart.o
+    0x08006248   0x0000003c   Code   RO         4431    i.print            uart.o
     0x08006284   0x0000002c   Code   RO         4798    locale$$code        c_w.l(lc_numeric_c.o)
     0x080062b0   0x0000002c   Code   RO         4825    locale$$code        c_w.l(lc_ctype_c.o)
     0x080062dc   0x0000000a   Code   RO         4893    x$fpl$fpinit        fz_wv.l(fpinit.o)

@@ -16,7 +16,7 @@ int main(void)
   uint8_t led_state=0;
   while (1){
     HAL_Delay(500);
-    uprint("hello world\r\n");
+    print("hello world\r\n");
     if(led_state){
       led_on(0);
     }else{

@@ -85,7 +85,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart1)
   }
 
 }
-void uprint(const char *s, ...)
+void print(const char *s, ...)
 {
     char buffer[512];   // 分配512字节的字符串缓存
      
