@@ -154,14 +154,14 @@ ifeq ($(V),1)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 else
 	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-	@echo CC '>'	$@
+	@echo CC $@
 endif
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 ifeq ($(V),1)
 	$(AS) -c $(CFLAGS) $< -o $@
 else
 	@$(AS) -c $(CFLAGS) $< -o $@
-	@echo AS '>'	$@
+	@echo AS $@
 endif
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
@@ -169,7 +169,7 @@ ifeq ($(V),1)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 else
 	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-	@echo CC '>'	$@
+	@echo CC $@
 endif
 	$(SZ) $@
 
